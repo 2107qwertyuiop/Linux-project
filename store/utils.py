@@ -9,7 +9,7 @@ def cookieCart(request):
         cart = json.loads(request.COOKIES['cart'])
     except:
         cart = {}
-    print('Cart: ', cart)
+        print('Cart: ', cart)
 
     # create empty info for guest user first, then take data from cookie to fill in
     items = []
@@ -32,6 +32,7 @@ def cookieCart(request):
 
             # build item in cart base on product id in cookie
             item = {
+                'id': product.id,
                 'product': {
                     'id': product.id,
                     'name': product.name,
@@ -39,6 +40,7 @@ def cookieCart(request):
                     'imageURL': product.imageURL,
                 },
                 'quantity': cart[i]['quantity'],
+                'digital' : product.digital,
                 'get_total': total,
             }
             items.append(item)
@@ -88,7 +90,7 @@ def guestOrder(request, data):
     )
 
     for item in items:
-        product = Product.objects.get(id=item['product']['id'])
+        product = Product.objects.get(id=item['id'])
         orderItems = OrderItem.objects.create(
             product=product,
             order=order,
