@@ -31,6 +31,39 @@
             return cookieValue;
         }
         const csrftoken = getToken('csrftoken');
+
+
+        //find file cookie cart that save in local storage
+        function getCookie(name) {
+            //Split cookie string and get all individual (name,value) pairs in an array
+            let cookieArr = document.cookie.split(";")
+
+            //loop through the array elements
+            for (let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].split("=");
+
+                //Removing whitespace at the beginning of the cookie name and compare it with the given string
+                if (name == cookiePair[0].trim()) {
+                    //Decode the cookie value and return it
+                    return decodeURIComponent(cookiePair[1])
+                }
+            }
+
+            //return null if not found user
+            return null;
+        }
+
+        let cart = JSON.parse(getCookie('cart'))
+
+
+        //check if there is no file cart in cookie of guest, create new one 
+        if (cart == undefined) {
+            cart = {}
+            console.log("Cart created !", cart);
+            document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
+            //reload page update this order to cart in backends
+
+        }
     </script>
 </head>
 
